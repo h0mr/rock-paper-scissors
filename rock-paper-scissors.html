@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock, Paper, Scissors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .choices {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .choice {
+      padding: 10px 20px;
+      border: 2px solid #333;
+      border-radius: 5px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .choice:hover {
+      background-color: #ddd;
+    }
+    .result {
+      font-size: 1.5rem;
+      margin-top: 20px;
+    }
+    .score {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Rock, Paper, Scissors</h1>
+    <div class="choices">
+      <div class="choice" id="rock">Rock</div>
+      <div class="choice" id="paper">Paper</div>
+      <div class="choice" id="scissors">Scissors</div>
+    </div>
+    <div class="result" id="result"></div>
+    <div class="score" id="score"></div>
+    <button id="reset">Reset Game</button>
+  </div>
+
+  <script>
+    const choices = document.querySelectorAll('.choice');
+    const resultDisplay = document.getElementById('result');
+    const scoreDisplay = document.getElementById('score');
+    const resetButton = document.getElementById('reset');
+    
+    let playerScore = 0;
+    let computerScore = 0;
+
+    const options = ['rock', 'paper', 'scissors'];
+
+    // Function to get the computer's random choice
+    function getComputerChoice() {
+      const randomIndex = Math.floor(Math.random() * options.length);
+      return options[randomIndex];
+    }
+
+    // Function to determine the winner
+    function getWinner(playerChoice, computerChoice) {
+      if (playerChoice === computerChoice) {
+        return 'draw';
+      } else if (
+        (playerChoice === 'rock' && computerChoice === 'scissors') ||
+        (playerChoice === 'scissors' && computerChoice === 'paper') ||
+        (playerChoice === 'paper' && computerChoice === 'rock')
+      ) {
+        return 'player';
+      } else {
+        return 'computer';
+      }
+    }
+
+    // Function to update the game
+    function playGame(playerChoice) {
+      const computerChoice = getComputerChoice();
+      const winner = getWinner(playerChoice, computerChoice);
+
+      if (winner === 'player') {
+        resultDisplay.textContent = `You win! ${playerChoice} beats ${computerChoice}`;
+        playerScore++;
+      } else if (winner === 'computer') {
+        resultDisplay.textContent = `You lose! ${computerChoice} beats ${playerChoice}`;
+        computerScore++;
+      } else {
+        resultDisplay.textContent = `It's a draw! You both chose ${playerChoice}`;
+      }
+
+      updateScore();
+    }
+
+    // Update the score display
+    function updateScore() {
+      scoreDisplay.textContent = `Player: ${playerScore} - Computer: ${computerScore}`;
+    }
+
+    // Add event listeners for each choice
+    choices.forEach(choice => {
+      choice.addEventListener('click', (e) => {
+        const playerChoice = e.target.id;
+        playGame(playerChoice);
+      });
+    });
+
+    // Reset the game
+    resetButton.addEventListener('click', () => {
+      playerScore = 0;
+      computerScore = 0;
+      resultDisplay.textContent = '';
+      updateScore();
+    });
+
+    // Initialize score display
+    updateScore();
+  </script>
+
+</body>
+</html>
